@@ -1,7 +1,6 @@
 <script setup>
-import { RouterLink } from 'vue-router';
 import { computed, ref, onMounted, watch } from 'vue';
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../../stores/auth';
 
 const auth = useAuthStore();
 const isAuthenticated = computed(() => !!auth.accessToken);
@@ -35,12 +34,6 @@ const applyTheme = () => {
 };
 
 onMounted(() => {
-  //   const saved = localStorage.getItem(THEME_KEY);
-  //   if (saved === 'dark') isDark.value = true;
-  //   else if (saved === 'light') isDark.value = false;
-  //   else isDark.value = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-  //   applyTheme();
-
   // 현재 html 상태를 기준으로 동기화
   isDark.value = document.documentElement.classList.contains('dark');
 });
@@ -71,7 +64,7 @@ watch(isDark, applyTheme);
 
       <!-- 인증 UI -->
       <template v-if="isAuthenticated">
-        <RouterLink to="/profile" class="block">
+        <router-link to="/profile" class="block">
           <img
             v-if="avatarUrl"
             :src="avatarUrl"
@@ -84,7 +77,7 @@ watch(isDark, applyTheme);
           >
             {{ initials }}
           </div>
-        </RouterLink>
+        </router-link>
 
         <button
           @click="handleLogout"
@@ -95,9 +88,9 @@ watch(isDark, applyTheme);
       </template>
 
       <template v-else>
-        <RouterLink to="/signin" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">
+        <router-link to="/signin" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">
           로그인
-        </RouterLink>
+        </router-link>
       </template>
     </div>
   </header>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
-import api from '../api/axios';
+import api from '../../api/axios';
 
 // Props/Emits
 const props = defineProps({
