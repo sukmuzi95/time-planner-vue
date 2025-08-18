@@ -6,8 +6,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 
-import api from '@/api/axios';
-import ScheduleForm from '@/components/ScheduleForm.vue';
+import api from '../api/axios';
+import ScheduleForm from '../components/ScheduleForm.vue';
 
 // React의 ScheduleData와 동일한 형태를 사용
 // { id, title, start, end, color, ownerId, ownerName }

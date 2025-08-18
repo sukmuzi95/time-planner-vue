@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute, RouterView } from 'vue-router';
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
-import AuthLayout from '@/layouts/AuthLayout.vue';
-import ErrorAlert from '@/components/common/ErrorAlert.vue';
+import DefaultLayout from './layouts/DefaultLayout.vue';
+import AuthLayout from './layouts/AuthLayout.vue';
+import ErrorAlert from './components/common/ErrorAlert.vue';
 
 const route = useRoute();
 

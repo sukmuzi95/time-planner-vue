@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/pages/Home.vue';
-import SignIn from '@/pages/SignIn.vue';
-import ScheduleCalendar from '@/pages/ScheduleCalendar.vue';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '../stores/auth';
+import Home from '../pages/Home.vue';
+import SignIn from '../pages/SignIn.vue';
+import ScheduleCalendar from '../pages/ScheduleCalendar.vue';
 
 const routes = [
   // 공개 페이지 (레이아웃: default)

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
-import { useErrorStore } from '@/stores/error';
+import { useErrorStore } from '../stores/error';
 
 const email = ref('');
 const password = ref('');

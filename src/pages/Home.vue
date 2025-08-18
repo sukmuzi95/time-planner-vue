@@ -1,5 +1,4 @@
 <script setup>
-import Header from '@/components/Header.vue';
 import { RouterLink } from 'vue-router';
 
 const heroBg = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop';

@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { computed, ref, onMounted, watch } from 'vue';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '../stores/auth';
 
 const auth = useAuthStore();
 const isAuthenticated = computed(() => !!auth.accessToken);

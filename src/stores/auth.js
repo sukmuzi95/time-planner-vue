@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import api from '@/api/axios';
-import router from '@/router';
+import api from '../api/axios';
+import router from '../router';
 
 const STORAGE_KEY = 'auth';
 

@@ -1,4 +1,3 @@
-<!-- src/components/ErrorAlert.vue -->
 <script setup>
 import { computed, ref, watch, onBeforeUnmount } from 'vue';
 import { useErrorStore } from '@/stores/error';

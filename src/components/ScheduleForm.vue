@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
-import api from '@/api/axios';
+import api from '../api/axios';
 
 // Props/Emits
 const props = defineProps({
@@ -178,10 +178,10 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
       <p v-if="errors.time" class="text-sm text-red-600">{{ errors.time }}</p>
 
       <!-- 색상(선택) -->
-      <div>
+      <!-- <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">색상(선택)</label>
         <input type="color" v-model="form.color" class="h-10 w-16 p-0 border rounded" />
-      </div>
+      </div> -->
     </div>
 
     <!-- 액션 -->
