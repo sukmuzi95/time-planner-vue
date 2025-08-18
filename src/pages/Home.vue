@@ -1,6 +1,4 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-
 const heroBg = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop';
 
 const features = [
@@ -55,12 +53,12 @@ const features = [
           </p>
 
           <div class="mt-8 flex items-center justify-center gap-3">
-            <RouterLink
+            <router-link
               to="/schedule"
               class="rounded-xl bg-indigo-600 px-5 py-3 text-white shadow-lg shadow-indigo-600/30 transition hover:-translate-y-0.5 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               지금 시작하기
-            </RouterLink>
+            </router-link>
             <a
               href="#features"
               class="rounded-xl bg-white/80 px-5 py-3 text-indigo-700 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-800"
@@ -128,12 +126,12 @@ const features = [
             시작하세요.
           </p>
           <div class="mt-6">
-            <RouterLink
+            <router-link
               to="/schedule"
               class="inline-block rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white shadow hover:bg-indigo-500"
             >
               공유 캘린더 열기
-            </RouterLink>
+            </router-link>
           </div>
         </div>
       </div>

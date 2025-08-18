@@ -67,6 +67,11 @@ const signin = async () => {
       >
         {{ loading ? '로그인 중…' : '로그인' }}
       </button>
+
+      <div className="mt-4 text-center text-sm text-gray-600">
+        회원이 아니신가요?
+        <router-link to="/signup" class="text-indigo-600 hover:underline">회원가입</router-link>
+      </div>
     </form>
   </div>
 </template>
