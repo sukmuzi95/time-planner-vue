@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref, watch, onBeforeUnmount } from 'vue';
-import { useErrorStore } from '@/stores/error';
+import { computed, watch, onBeforeUnmount } from 'vue';
+import { useErrorStore } from '../../stores/error';
 
 const errorStore = useErrorStore();
 

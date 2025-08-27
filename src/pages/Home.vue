@@ -90,7 +90,7 @@ const features = [
           <component
             v-for="(f, idx) in features"
             :key="idx"
-            :is="f.to ? RouterLink : 'div'"
+            :is="f.to ? 'router-link' : 'div'"
             :to="f.to || undefined"
             class="group rounded-2xl border border-slate-200 bg-gradient-to-b from-indigo-50/70 to-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:from-slate-900/40 dark:to-slate-900"
           >

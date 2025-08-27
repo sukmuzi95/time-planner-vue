@@ -6,7 +6,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 
+import { getColorForUser } from '../../utils/color';
 import api from '../../api/axios';
+
 import ScheduleForm from '../../components/schedule/ScheduleForm.vue';
 
 // React의 ScheduleData와 동일한 형태를 사용
@@ -15,20 +17,6 @@ import ScheduleForm from '../../components/schedule/ScheduleForm.vue';
 const schedules = ref([]); // 원본 데이터
 const showForm = ref(false);
 const selected = ref(null); // 현재 선택된 일정(등록/수정용)
-
-// 사용자별 색상 고정
-const getColorForUser = (userId) => {
-  const colors = [
-    '#6366F1', // indigo
-    '#10B981', // emerald
-    '#F59E0B', // amber
-    '#EF4444', // red
-    '#3B82F6', // blue
-    '#8B5CF6', // violet
-    '#EC4899', // pink
-  ];
-  return colors[userId % colors.length];
-};
 
 // FullCalendar에서 사용할 events로 변환
 const calendarEvents = computed(() =>
@@ -69,17 +57,17 @@ const handleDelete = async () => {
 // 빈 영역 드래그/클릭 선택하여 새 일정 기본값 생성
 const onSelect = (selectInfo) => {
   // selectInfo: { start, end, allDay, ... }
+  console.log(selectInfo);
   const start = selectInfo.startStr; // ISO 문자열
   const end = selectInfo.endStr;
 
   selected.value = {
-    id: 0,
-    title: '',
+    // id: 0,
+    // title: '',
     start, // 'YYYY-MM-DDTHH:mm' 형태면 그대로 사용 가능
     end,
-    color: '#6366F1',
-    ownerId: 0,
-    ownerName: '',
+    // ownerId: 0,
+    // ownerName: '',
   };
   showForm.value = true;
 };
@@ -105,12 +93,10 @@ const calendarOptions = reactive({
   initialView: 'dayGridMonth',
   selectable: true,
   selectMirror: true,
-  // 한국어 등 로케일이 필요하면 locale 옵션 추가 가능 (패키지 별도 설치)
-  // locale: 'ko',
+  locale: 'ko',
   events: calendarEvents,
   select: onSelect,
   eventClick: onEventClick,
-  // 클릭 후 선택 영역 자동 해제
   unselectAuto: true,
   height: 700,
 });

@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import Home from '../pages/Home.vue';
-import SignIn from '../pages/SignIn.vue';
+import SignIn from '../pages/member/SignIn.vue';
+import SignUp from '../pages/member/SignUp.vue';
 import ScheduleCalendar from '../pages/schedule/ScheduleCalendar.vue';
 
 const routes = [
@@ -10,6 +11,7 @@ const routes = [
 
   // 공개 페이지 (레이아웃: auth)
   { path: '/signin', name: 'signin', component: SignIn, meta: { layout: 'auth', public: true } },
+  { path: '/signup', name: 'signup', component: SignUp, meta: { layout: 'auth', public: true } },
 
   // 인증 필요한 페이지 (레이아웃: default)
   { path: '/schedule', name: 'schedule', component: ScheduleCalendar, meta: { layout: 'default', requiresAuth: true } },

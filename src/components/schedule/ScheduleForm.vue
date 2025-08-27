@@ -1,6 +1,8 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import api from '../../api/axios';
+import { useAuthStore } from '../../stores/auth';
+import { storeToRefs } from 'pinia';
 
 // Props/Emits
 const props = defineProps({
@@ -24,13 +26,15 @@ const toLocalInput = (v) => {
   return s;
 };
 
+const auth = useAuthStore();
+const { user } = storeToRefs(auth);
+
 // 로컬 폼 상태
-const form = ref({
+const form = reactive({
   id: 0,
   title: '',
   start: '',
   end: '',
-  color: '#6366F1',
   ownerId: 0,
   ownerName: '',
 });
@@ -38,19 +42,28 @@ const form = ref({
 // 오류 메시지
 const errors = ref({ title: '', time: '' });
 
+console.log(props.defaultValues.start);
+
 // props.defaultValues 변경 시 폼 동기화
 watch(
-  () => props.defaultValues,
-  (v) => {
-    form.value = {
+  [() => props.defaultValues, user],
+  ([v, u]) => {
+    Object.assign(form, {
       id: v?.id ?? 0,
       title: v?.title ?? '',
       start: toLocalInput(v?.start),
       end: toLocalInput(v?.end),
-      color: v?.color ?? '#6366F1',
-      ownerId: v?.ownerId ?? 0,
-      ownerName: v?.ownerName ?? '',
-    };
+      ownerId: v?.ownerId ?? u?.value?.id ?? 0,
+      ownerName: v?.ownerName ?? u?.value?.nickname ?? '',
+    });
+    // form.value = {
+    //   id: v?.id ?? 0,
+    //   title: v?.title ?? '',
+    //   start: toLocalInput(v?.start),
+    //   end: toLocalInput(v?.end),
+    //   ownerId: v?.ownerId ?? u?.value?.id ?? 0,
+    //   ownerName: v?.ownerName ?? u?.value?.nickname ?? '',
+    // };
     errors.value = { title: '', time: '' };
   },
   { immediate: true, deep: true }
@@ -61,14 +74,14 @@ const isValid = () => {
   let ok = true;
   errors.value = { title: '', time: '' };
 
-  if (!form.value.title.trim()) {
+  if (!form.title.trim()) {
     errors.value.title = '제목을 입력하세요.';
     ok = false;
   }
-  if (form.value.start && form.value.end) {
-    const s = new Date(form.value.start);
-    const e = new Date(form.value.end);
-    if (!(s < e)) {
+  if (form.start && form.end) {
+    const startDate = new Date(form.start);
+    const endDate = new Date(form.end);
+    if (!(startDate < endDate)) {
       errors.value.time = '시작 시간은 종료 시간보다 앞서야 합니다.';
       ok = false;
     }
@@ -86,16 +99,15 @@ const handleSave = async () => {
   saving.value = true;
   try {
     const payload = {
-      title: form.value.title,
-      start: form.value.start, // 서버가 ISO 문자열 처리한다고 가정
-      end: form.value.end,
-      color: form.value.color,
-      ownerId: form.value.ownerId,
-      ownerName: form.value.ownerName,
+      title: form.title,
+      start: form.start, // 서버가 ISO 문자열 처리한다고 가정
+      end: form.end,
+      ownerId: form.ownerId || (user.value?.id ?? 0),
+      ownerName: form.ownerName || (user.value?.nickname ?? ''),
     };
 
-    if (form.value.id && form.value.id !== 0) {
-      await api.put(`/schedules/shared/${form.value.id}`, payload);
+    if (form.id && form.id !== 0) {
+      await api.put(`/schedules/shared/${form.id}`, payload);
     } else {
       await api.post('/schedules/shared', payload);
     }
@@ -113,7 +125,7 @@ const handleSave = async () => {
 const deleting = ref(false);
 const handleDeleteClick = async () => {
   if (!props.onDelete) return;
-  if (!form.value.id || form.value.id === 0) return;
+  if (!form.id || form.id === 0) return;
   if (!confirm('이 일정을 삭제할까요?')) return;
   deleting.value = true;
   try {
@@ -123,11 +135,11 @@ const handleDeleteClick = async () => {
   }
 };
 
-const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
+const isEdit = computed(() => !!form.id && form.id !== 0);
 </script>
 
 <template>
-  <div>
+  <div class="bg-white dark:bg-slate-800 dark:text-slate-100 p-6 rounded-lg shadow-lg">
     <h2 class="text-xl font-semibold mb-4">
       {{ isEdit ? '일정 수정' : '일정 등록' }}
     </h2>
@@ -135,7 +147,7 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
     <div class="space-y-4">
       <!-- 제목 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">제목</label>
+        <label class="block text-sm font-medium mb-1">제목</label>
         <input
           type="text"
           v-model="form.title"
@@ -145,21 +157,21 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
         <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
       </div>
 
-      <!-- 소유자 이름(선택) -->
+      <!-- 소유자 이름 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">소유자 이름(선택)</label>
+        <label class="block text-sm font-medium mb-1">소유자 이름</label>
         <input
           type="text"
           v-model="form.ownerName"
           class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-indigo-400"
-          placeholder="예: 무지꿍"
+          disabled
         />
       </div>
 
       <!-- 시작/종료 -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">시작</label>
+          <label class="block text-sm font-medium mb-1">시작</label>
           <input
             type="datetime-local"
             v-model="form.start"
@@ -167,7 +179,7 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">종료</label>
+          <label class="block text-sm font-medium mb-1">종료</label>
           <input
             type="datetime-local"
             v-model="form.end"
@@ -176,23 +188,21 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
         </div>
       </div>
       <p v-if="errors.time" class="text-sm text-red-600">{{ errors.time }}</p>
-
-      <!-- 색상(선택) -->
-      <!-- <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">색상(선택)</label>
-        <input type="color" v-model="form.color" class="h-10 w-16 p-0 border rounded" />
-      </div> -->
     </div>
 
     <!-- 액션 -->
     <div class="mt-6 flex items-center justify-end gap-2">
-      <button type="button" class="px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-50" @click="$emit('cancel')">
+      <button
+        type="button"
+        class="px-4 py-2 rounded-lg border hover:bg-gray-50 dark:hover:bg-slate-900"
+        @click="$emit('cancel')"
+      >
         취소
       </button>
 
       <button
         type="button"
-        class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+        class="px-4 py-2 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60"
         :disabled="saving"
         @click="handleSave"
       >
@@ -202,7 +212,7 @@ const isEdit = computed(() => !!form.value.id && form.value.id !== 0);
       <button
         v-if="isEdit && onDelete"
         type="button"
-        class="ml-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60"
+        class="ml-2 px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700 disabled:opacity-60"
         :disabled="deleting"
         @click="handleDeleteClick"
       >

@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
-import { useErrorStore } from '../stores/error';
+import { useAuthStore } from '../../stores/auth';
+import { useErrorStore } from '../../stores/error';
 
 const email = ref('');
 const password = ref('');
@@ -34,7 +34,7 @@ const signin = async () => {
 <template>
   <div class="min-h-[70vh] flex items-center justify-center px-4">
     <form @submit.prevent="signin" class="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow dark:bg-slate-800">
-      <h2 class="text-center text-xl font-bold text-slate-800 dark:text-white">로그인</h2>
+      <h2 class="text-center text-xl font-bold text-slate-800 dark:text-white">🔐 TimePlanner 로그인</h2>
 
       <div class="space-y-2">
         <label class="block text-sm text-slate-600 dark:text-slate-300">이메일</label>
